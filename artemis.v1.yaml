@@ -8,18 +8,18 @@ basePath: /api
 produces:
   - application/json
 paths:
-  /init:
+  /event/onload:
     post:
-      summary: get config for client side
+      summary: Get config for client side and collecting OnLoad event from browser
       parameters:
-        - name: initInfo
+        - name: rawData
           in: body
           required: true
           schema:
             type: object
-            required: 
-              - uid
+            required:
               - ic
+              - eventData
             properties:
               uid:
                 type: string
@@ -27,51 +27,36 @@ paths:
               ic:
                 type: string
                 description: identity code
+              eventData:
+                type: object
+                description: data from browser onload event
+                properties:
+                  appCodeName:
+                    type: string
+                  appName:
+                    type: string
+                  appVersion:
+                    type: string
+                  cookieEnabled:
+                    type: boolean
+                  href:
+                    type: string
+                  innerHeight:
+                    type: integer
+                  innerWidth:
+                    type: integer
+                  scrollX:
+                    type: integer
+                  scrollY:
+                    type: integer
+                  timeStamp:
+                    type: integer
+                    description: Unix Timestamp (milliseconds)
       responses:
         200:
           description: Success
           schema:
             $ref: "#/definitions/ConfigResponse"
-        default:
-          description: Error
-          schema:
-            $ref: "#/definitions/Error"
-  /event/onload:
-    post:
-      summary: Collecting OnLoad event from browser
-      parameters:
-        - name: rawData
-          in: body
-          required: true
-          schema:
-            type: object
-      responses:
-        200:
-          description: Success
-          schema:
-            type: object
-            properties:
-              appCodeName:
-                type: string
-              appName:
-                type: string
-              appVersion:
-                type: string
-              cookieEnabled:
-                type: boolean
-              href:
-                type: string
-              innerHeight:
-                type: integer
-              innerWidth:
-                type: integer
-              scrollX:
-                type: integer
-              scrollY:
-                type: integer
-              timeStamp:
-                type: integer
-                description: Unix Timestamp (milliseconds)
         default:
           description: Error
           schema:
@@ -147,19 +132,30 @@ paths:
 definitions:
   ConfigResponse:
     type: object
-    required: 
+    required:
       - uid
-      - disabledFeatures
+      - enabledFeatures
     properties:
-      uid: 
+      uid:
         type: string
         description: unique user id
-      disabledFeatures:
+      enabledFeatures:
         type: array
-        description: list of dom element ids to be disabled
+        description: list of enabled features
         items:
-          type: string
-          description: dom element id
+          type: object
+          description: dom element attributes
+          properties:
+            name:
+              type: string
+              description: feature name
+            type:
+              type: string
+              description: feature type to be enabled
+              enum:
+                - A
+                - B
+                - default
   Error:
     type: object
     properties:
