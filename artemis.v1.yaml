@@ -26,14 +26,15 @@ paths:
           schema:
             type: object
             properties:
-              featuresConfig:
+              featureList:
                 type: array
+                description: List of features with version to render
                 items:
                   type: object
                   properties:
-                    featureName:
+                    name:
                       type: string
-                    featureType:
+                    version:
                       type: string
               code:
                 type: string
