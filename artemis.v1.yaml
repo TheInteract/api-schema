@@ -1,6 +1,6 @@
 swagger: '2.0'
 info:
-  version: "1.0.0"
+  version: "1.1.0"
   title: Project Artemis
   description: collector + feature toggle
 host: interact.com
@@ -8,6 +8,39 @@ basePath: /api
 produces:
   - application/json
 paths:
+  /init:
+    post:
+      parameters:
+        - name: initInformation
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              customerCode:
+                type: string
+              hashedUserId:
+                type: string
+      responses:
+        200:
+          schema:
+            type: object
+            properties:
+              featuresConfig:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    featureName:
+                      type: string
+                    featureType:
+                      type: string
+              code:
+                type: string
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
   /event/onload:
     post:
       summary: Get config for client side and collecting OnLoad event from browser
@@ -55,8 +88,7 @@ paths:
       responses:
         200:
           description: Success
-          schema:
-            $ref: "#/definitions/ConfigResponse"
+          type: object
         default:
           description: Error
           schema:
