@@ -34,7 +34,7 @@ paths:
                     version:
                       type: string
                       description: feature version to render
-              code:
+              initCode:
                 type: string
         default:
           description: Error
