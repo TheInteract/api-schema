@@ -15,14 +15,10 @@ paths:
           in: body
           required: true
           schema:
-            type: object
-            properties:
-              customerCode:
-                type: string
-              hashedUserId:
-                type: string
+            $ref: "#/definitions/InitInformation"
       responses:
         200:
+          description: Success
           schema:
             type: object
             properties:
@@ -34,8 +30,10 @@ paths:
                   properties:
                     name:
                       type: string
+                      description: feature name
                     version:
                       type: string
+                      description: feature version to render
               code:
                 type: string
         default:
@@ -52,15 +50,15 @@ paths:
           schema:
             type: object
             required:
-              - ic
+              - customerCode
               - eventData
             properties:
-              uid:
+              customerCode:
                 type: string
-                description: unique user id
-              ic:
+                description: customer code
+              hashedUserId:
                 type: string
-                description: identity code
+                description: hashed user id (unique)
               eventData:
                 type: object
                 description: data from browser onload event
@@ -89,7 +87,8 @@ paths:
       responses:
         200:
           description: Success
-          type: object
+          schema:
+            type: object
         default:
           description: Error
           schema:
@@ -163,32 +162,17 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 definitions:
-  ConfigResponse:
+  InitInformation:
     type: object
     required:
-      - uid
-      - enabledFeatures
+      - customerCode
     properties:
-      uid:
+      customerCode:
         type: string
-        description: unique user id
-      enabledFeatures:
-        type: array
-        description: list of enabled features
-        items:
-          type: object
-          description: dom element attributes
-          properties:
-            name:
-              type: string
-              description: feature name
-            type:
-              type: string
-              description: feature type to be enabled
-              enum:
-                - A
-                - B
-                - default
+        description: customer code
+      hashedUserId:
+        type: string
+        description: hashed user id (unique)
   Error:
     type: object
     properties:
