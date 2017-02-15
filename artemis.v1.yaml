@@ -21,6 +21,9 @@ paths:
           description: Success
           schema:
             type: object
+            required:
+            - featureList
+            - initCode
             properties:
               featureList:
                 type: array
@@ -34,6 +37,8 @@ paths:
                     version:
                       type: string
                       description: feature version to render
+              deviceCode:
+                type: string
               initCode:
                 type: string
         default:
@@ -166,13 +171,21 @@ definitions:
     type: object
     required:
       - customerCode
+      - userIdentity
     properties:
       customerCode:
         type: string
         description: customer code
-      hashedUserId:
-        type: string
-        description: hashed user id (unique)
+      userIdentity:
+        type: object
+        description: user identity of device and user
+        properties:
+          deviceCode:
+            type: string
+            description: device cookie
+          hashedUserId:
+            type: string
+            description: hashed user id (unique)
   Error:
     type: object
     properties:
